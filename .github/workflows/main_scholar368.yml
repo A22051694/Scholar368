@@ -22,9 +22,14 @@ jobs:
 
       - name: Create minimal .csproj file if not exists
         run: |
-          if [ ! -f myapp.csproj ]; then
-            echo '<Project Sdk="Microsoft.NET.Sdk.Web">\n  <PropertyGroup>\n    <TargetFramework>net8.0</TargetFramework>\n  </PropertyGroup>\n</Project>' > myapp.csproj
-          fi
+          if (-Not (Test-Path "myapp.csproj")) {
+            Set-Content -Path "myapp.csproj" -Value '<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+</Project>'
+          }
+        shell: pwsh
 
       - name: Build with dotnet
         run: dotnet build --configuration Release myapp.csproj
